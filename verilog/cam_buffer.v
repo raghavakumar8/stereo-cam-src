@@ -23,18 +23,15 @@ module cam_buffer(
 	input		[9:0]	x_addr,
 	input		[9:0]	y_addr,
 
-	output		[7:0]	value,
-
-	// Debugging interfaces
-	output				is_wr_val,
-	output		[7:0]	wr_val
+	output		[7:0]	value
 );
 
 	// Define local wires
-	//wire		[7:0]	wr_val;
-	//wire				is_wr_val;
+	wire		[7:0]	wr_val;
+	wire				is_wr_val;
 	wire		[18:0]	wr_addr;
 	wire 		[18:0]	rd_addr;
+	wire		[18:0]	rd_addr320;
 
 	// Instantiate camera
 	ov7670 cam(
@@ -55,14 +52,13 @@ module cam_buffer(
 	);
 
 	// Determine rd_addr using x_addr and y_addr
-	assign rd_addr = x_addr + y_addr*640;
+	assign rd_addr = x_addr + y_addr*320;
 
-	// Instantiate dual port memory
-	dual_clock_ram_640_480 frame_buf(
+	dual_clock_ram_320_240 frame_buf(
 		.q(value),
 		.d(wr_val),
-		.write_address(wr_addr),
-		.read_address(rd_addr),
+		.write_address(wr_addr[16:0]),
+		.read_address(rd_addr[16:0]),
 		.we(is_wr_val),
 		.clk1(pclk),
 		.clk2(rd_clk)
