@@ -22,12 +22,12 @@ if (nargin < 3)
 end
 
 %filtering with laplacian of gaussian
-lapOfGauss = [0 -1 0 ; -1 4 -1 ; 0 -1 0];
-l1 = conv2(left, lapOfGauss,'same');
-r1 = conv2(right, lapOfGauss,'same');
-%figure;imagesc(l1);colormap(gray);axis image;
-left = l1;
-right = r1;
+% lapOfGauss = [0 -1 0 ; -1 4 -1 ; 0 -1 0];
+% l1 = conv2(left, lapOfGauss,'same');
+% r1 = conv2(right, lapOfGauss,'same');
+% %figure;imagesc(l1);colormap(gray);axis image;
+% left = l1;
+% right = r1;
 
 
 [m n]=size(left);

@@ -1,4 +1,4 @@
-function disparity_map = census_match(left, right, maxdisp)
+function disparity_map = rank_match(left, right, maxdisp)
 % disparity_map = correlation_match(left, right, maxdisp): given a pair of stereo
 % images, calculates the disparity (along horizontal direction) subject
 % to a maximum of maxdisp. The direction of matching is specified by dir
@@ -19,15 +19,15 @@ function disparity_map = census_match(left, right, maxdisp)
 % left = l1;
 % right = r1;
 
-%left = conv2(left, ones(5,5), 'same');
-%right = conv2(right, ones(5,5), 'same');
+left = conv2(left, ones(5,5), 'same');
+right = conv2(right, ones(5,5), 'same');
 
 [m n]=size(left);
 
 %window size
-windowSize = 11;
-postCensusWindowSize = 3;
-window = ones(1, postCensusWindowSize);
+windowSize = 3;
+postRankWindowSize = 5;
+window = ones(1, postRankWindowSize);
 
 % 3D array, used to store 0:maxdisp correlation values for each pixel
 img = zeros(m - windowSize + 1,n - windowSize + 1,1+maxdisp);
@@ -40,10 +40,12 @@ corrSumKernel =window'*window; %should probably be made two separate
                                %1-D convs
 
 %do the census transform
-leftCen = zeros(m-windowSize+1, n-windowSize+1, windowSize*windowSize);
-rightCen = zeros(m-windowSize+1, n-windowSize+1, windowSize*windowSize);
+leftRank = zeros(m-windowSize+1, n-windowSize+1);
+rightRank = zeros(m-windowSize+1, n-windowSize+1);
+rankBitVecL = zeros(1,windowSize*windowSize);
+rankBitVecR = zeros(1,windowSize*windowSize);
 
-%Generate the censur matrix for both left and right images
+%Generate the rank matrix for both left and right images
 for y=1:m-windowSize+1
     for x=1:n-windowSize+1
         centerY = y+(windowSize-1)/2;
@@ -54,29 +56,29 @@ for y=1:m-windowSize+1
             for i=0:windowSize-1
                 currentPixL = left(y+j, x+i);
                 currentPixR = right(y+j, x+i);
-                %if pixel > center pixel, then 1, else 0
-                leftCen(y, x, j*9 + i + 1) = currentPixL > centerPixL;
-                rightCen(y, x, j*9 + i + 1) = currentPixR > centerPixR;
+                %if pixel < center pixel, then 1, else 0
+                rankBitVecL(j*9 + i + 1) = currentPixL < centerPixL;
+                rankBitVecR(j*9 + i + 1) = currentPixR < centerPixR;
             end
         end
+        
+        % Sum up the bits in the bit vec
+        leftRank(y, x) = sum(rankBitVecL);
+        rightRank(y, x) = sum(rankBitVecR);
     end
 end
 
+% Perform SAD on the rank matrix
 for d=0:maxdisp
     diss(:) = Inf;
-    
+      
     for y = 1:m-windowSize+1
         for x = 1:n-windowSize+1-d
-            leftCenVec = leftCen(y, x+d, :);
-            rightCenVec = rightCen(y, x, :);
-            
-            hammingVec = xor(leftCenVec, rightCenVec);
-            hammingDist = sum(hammingVec);
-            
-            diss(y, x) = hammingDist;
+            diss(y, x) = abs(leftRank(y, x+d) - rightRank(y, x));
         end
     end
-    
+      
+    %update the big matrix
     img(:,:,d+1) = conv2(diss,corrSumKernel,'same');
 end
 
