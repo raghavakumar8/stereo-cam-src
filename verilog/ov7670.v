@@ -1,4 +1,5 @@
 /* Interfaces with the OV7670 camera module.
+ * Averages a 640*480 input to produce 320*240 output data.
  *
  * Notes:
  *  - Drives xclk @25MHz
@@ -62,8 +63,8 @@ module ov7670(
 	
 	reg last_href;	// To keep track of href edges
 	reg	is_y;		// Alternate bytes represent Y (luminance) 
-	reg	is_wr_row;// Is a write row (we write every other row for 320*240)
-	reg	pixel_num;// Left or right pixel (0 is left, 1 is right)
+	reg	is_wr_row;	// Is a write row (we write every other row for 320*240)
+	reg	pixel_num;	// Left or right pixel (0 is left, 1 is right)
 
 	// Deal with data
 	always@ (posedge pclk) begin

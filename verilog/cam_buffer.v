@@ -1,7 +1,6 @@
-/* Interfaces with the OV7670 camera module
- * and writes to a local frame buffer that
- * can be indexed into and read (to display
- * on VGA or process further). */
+/* Interfaces with the OV7670 camera module and writes to a local
+ * frame buffer that can be indexed into and read (to display on 
+ * VGA or process further). */
 module cam_buffer(
 	input				clk_50,
 	input				reset,
