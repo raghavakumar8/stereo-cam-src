@@ -19,13 +19,13 @@ function disparity_map = census_match(left, right, maxdisp)
 % left = l1;
 % right = r1;
 
-%left = conv2(left, ones(5,5), 'same');
-%right = conv2(right, ones(5,5), 'same');
+left = conv2(left, ones(3,3), 'same');
+right = conv2(right, ones(3,3), 'same');
 
 [m n]=size(left);
 
 %window size
-windowSize = 11;
+windowSize = 3;
 postCensusWindowSize = 3;
 window = ones(1, postCensusWindowSize);
 
@@ -62,6 +62,9 @@ for y=1:m-windowSize+1
     end
 end
 
+h = waitbar(0,'Computing disparity...');
+set(h,'Name','Disparity progress');
+
 for d=0:maxdisp
     diss(:) = Inf;
     
@@ -78,7 +81,12 @@ for d=0:maxdisp
     end
     
     img(:,:,d+1) = conv2(diss,corrSumKernel,'same');
+    %img(:,:,d+1) = diss;
+    waitbar(d/maxdisp);
 end
+
+% Close waitbar.
+close(h);
 
 %[valMin,indMin]=min(img,[],3);
 [valMin2, indMin2] = sort(img, 3, 'ascend');
@@ -87,7 +95,7 @@ min2SAD = valMin2(:,:,2);
 uniqueCheck = arrayfun(@(min1, min2) (min1 + min1/4) < min2, minSAD, min2SAD);
 dmapUnique = uniqueCheck.*indMin2(:,:,1) + (1 - uniqueCheck).*indMin2(:,:,3);
 disparity_map = indMin2(:,:,1)-1;
-
+%figure;imagesc(minSAD - min2SAD);colormap(gray);axis image;
 if (nargout ==0) %show output only if the user didn't specify an output
                  %image
   %figure;imagesc(dmapUnique);colormap(gray);axis image;
