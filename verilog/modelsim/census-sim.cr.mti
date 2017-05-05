@@ -1,9 +1,9 @@
-{C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v}
+{C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v}
 Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
--- Compiling module cam_sim
+-- Compiling module vga_buf_sim
 
 Top level modules:
-	cam_sim
+	vga_buf_sim
 
 } {} {}} {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v}
 Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014

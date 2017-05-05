@@ -29,14 +29,30 @@ module testbench();
 		clk = !clk;
 	end
 
+	// Local wires
+	wire			pclk;
+	wire	[7:0]	value;
+	wire	[9:0]	x;
+	wire	[9:0]	y;
+	wire			is_val;
+
 	cam_sim my_cam(
 		.clk(clk),
 		.reset(reset),
-		.pclk(),
-		.value(),
-		.x(),
-		.y(),
-		.is_val()
+		.pclk(pclk),
+		.value(value),
+		.x(x),
+		.y(y),
+		.is_val(is_val)
+	);
+
+	vga_buf_sim my_vga(
+		.pclk(pclk),
+		.reset(reset),
+		.value(value),
+		.x(x),
+		.y(y),
+		.is_val(is_val)
 	);
 
 	// Print statements, etc

@@ -9,42 +9,62 @@ z2
 cModel Technology
 dC:/altera/15.0
 vcam_sim
-!s110 1493946076
+Z0 !s110 1493953269
 !i10b 1
-!s100 WBU=DWE_I;hfTVmjzM^h?0
-IkZS2WHGXMbzc6L:hl1fiZ3
-Z0 V`JN@9S9cnhjKRR_L]QIcM3
-Z1 dC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim
-w1493946073
+!s100 M2IW:JOlBn6Ti[2ODoHh=3
+Id1S`N<SmaJWMOl=ihFXn:1
+Z1 V`JN@9S9cnhjKRR_L]QIcM3
+Z2 dC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim
+w1493953256
 8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v
 FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v
 L0 2
-Z2 OV;L;10.3d;59
+Z3 OV;L;10.3d;59
 r1
 !s85 0
 31
-!s108 1493946076.793000
+!s108 1493953269.058000
 !s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v|
 !i113 1
-Z3 o-work work
+Z4 o-work work
 vtestbench
-!s110 1493946077
-!i10b 1
-!s100 M@K_8F10]:[0LiJINiBb;1
-I1KJkchnP10[i2l@[fWD2g2
 R0
+!i10b 1
+!s100 @0=MP66T=Q27QATHGoAKj1
+IIK8o9Y8`cHPBFndQJ?KHj0
 R1
-w1493942706
+R2
+w1493952863
 8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v
 FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v
 L0 3
-R2
+R3
 r1
 !s85 0
 31
-!s108 1493946077.033000
+!s108 1493953269.298000
 !s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v|
 !i113 1
+R4
+vvga_buf_sim
+R0
+!i10b 1
+!s100 ObOKFOXga@[QA226N3l@70
+IM>9doj7YQdWZCV9Pj:k=21
+R1
+R2
+w1493953004
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v
+L0 2
 R3
+r1
+!s85 0
+31
+!s108 1493953269.567000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v|
+!i113 1
+R4

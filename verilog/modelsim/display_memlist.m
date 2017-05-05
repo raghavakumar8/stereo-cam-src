@@ -1,5 +1,5 @@
 % Change filename here.
-mem_name = 'a.list';
+mem_name = 'out.list';
 fid = fopen(mem_name,'r');
 
 % Instantiate matrix
