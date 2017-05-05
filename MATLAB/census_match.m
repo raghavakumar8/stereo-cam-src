@@ -19,13 +19,13 @@ function disparity_map = census_match(left, right, maxdisp)
 % left = l1;
 % right = r1;
 
-left = conv2(left, ones(3,3), 'same');
-right = conv2(right, ones(3,3), 'same');
+left = conv2(left, ones(5,5), 'same');
+right = conv2(right, ones(5,5), 'same');
 
 [m n]=size(left);
 
 %window size
-windowSize = 3;
+windowSize = 5;
 postCensusWindowSize = 3;
 window = ones(1, postCensusWindowSize);
 
@@ -50,10 +50,10 @@ for y=1:m-windowSize+1
         centerX = x+(windowSize-1)/2;
         centerPixL = left(centerY, centerX);
         centerPixR = right(centerY, centerX);
-        for j=0:windowSize-1
-            for i=0:windowSize-1
-                currentPixL = left(y+j, x+i);
-                currentPixR = right(y+j, x+i);
+        for j=0:(windowSize-1)/2
+            for i=0:(windowSize-1)/2
+                currentPixL = left(y+j*2, x+i*2);
+                currentPixR = right(y+j*2, x+i*2);
                 %if pixel > center pixel, then 1, else 0
                 leftCen(y, x, j*9 + i + 1) = currentPixL > centerPixL;
                 rightCen(y, x, j*9 + i + 1) = currentPixR > centerPixR;

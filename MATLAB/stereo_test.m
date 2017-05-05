@@ -19,3 +19,4 @@ sigma = [3 0.1]; % bilateral filter standard deviations
 %imshow(iml_n_blftl);
 
 census_match(imlcones, imrcones, 60);
+census_match(iml_n, imr_n, 60);
