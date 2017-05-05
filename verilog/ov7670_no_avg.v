@@ -30,6 +30,18 @@ module ov7670_no_avg(
 	output	reg	[18:0]	mem_addr,
 	output	reg			is_val
 );
+	reg 		[7:0]	val_temp;
+	reg			[7:0]	val_msb;
+
+	// Draw a white border around the image
+	always@ (*) begin
+		if (x_addr == 0 || x_addr == 314 || y_addr == 0 || y_addr == 239) begin
+			value <= 8'hFF;
+		end
+		else begin
+			value <= val_temp;
+		end
+	end
 
 	// Drive xclk (25 MHz)
 	always@ (posedge clk_50) begin
@@ -54,19 +66,19 @@ module ov7670_no_avg(
 	end
 	
 	reg last_href;	// To keep track of href edges
-	reg	is_y;		// Alternate bytes represent Y (luminance)
+	reg	is_lsb;		// Alternate bytes represent Y (luminance)
 
 	// Deal with data
 	always@ (posedge pclk) begin
 		// Reset position at the end of frame
 		if (vsync == 1'b1 && href == 1'b0 && last_href == 1'b0) begin
-			x_addr <= 10'b0;
+			x_addr <= 10'd1023;
 			y_addr <= 10'b0;
-			mem_addr <= 19'b0;
+			mem_addr <= 19'd524287;
 
-			value <= 8'b0;
+			val_temp <= 8'b0;
 			is_val <= 1'b0;
-			is_y <= 1'b0;
+			is_lsb <= 1'b0;
 		end
 
 		// Frame ongoing
@@ -74,12 +86,12 @@ module ov7670_no_avg(
 			// Write alternate bytes to memory while the frame is ongoing
 			if (href == 1'b1) begin
 				// Copy only the Y (luminance) component of data
-				if (is_y) begin
+				if (is_lsb) begin
 					x_addr <= x_addr + 10'b1;
 					y_addr <= y_addr;
 					mem_addr <= mem_addr + 1;
 
-					value <= data;
+					val_temp <= data;
 					is_val <= 1'b1;
 				end
 				else begin
@@ -87,20 +99,20 @@ module ov7670_no_avg(
 					y_addr <= y_addr;
 					mem_addr <= mem_addr;
 
-					value <= 8'b0;
+					val_msb <= data;
 					is_val <= 1'b0;
 				end
 
-				is_y <= ~is_y;
+				is_lsb <= ~is_lsb;
 			end
 			// Invalid line
 			else begin
-				value <= 8'b0;
+				val_temp <= 8'b0;
 				is_val <= 1'b0;
-				is_y <= 1'b0;
+				is_lsb <= 1'b0;
 
 				if (last_href == 1'b1) begin
-					x_addr <= 10'b0;
+					x_addr <= 10'd1023;
 					y_addr <= y_addr + 10'b1;
 					mem_addr <= mem_addr;					
 				end
