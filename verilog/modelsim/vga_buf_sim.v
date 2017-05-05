@@ -1,4 +1,4 @@
-/* Reads image from file, emulating a camera. */
+/* Writes incoming pixels to a file, simulating the VGA buffer. */
 module vga_buf_sim(
 	input				pclk,
 	input				reset,
