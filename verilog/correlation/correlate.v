@@ -35,15 +35,19 @@ module correlate(
 	generate
 	    for (i = 0; i < disp-1; i = i + 1) begin: SHIFT_BUFFER
 	        always @(posedge clk) begin
-	            left_buffer[i] <= left_buffer[i+1];
-	            right_buffer[i] <= right_buffer[i+1];
+	    		if (bitvec_val) begin
+	            	left_buffer[i] <= left_buffer[i+1];
+	            	right_buffer[i] <= right_buffer[i+1];
+	            end
 	        end
 	    end
 	endgenerate
 
 	always @(posedge clk) begin
-		left_buffer[disp-1] <= left_bitvec;
-		right_buffer[disp-1] <= right_bitvec;
+		if (bitvec_val) begin
+			left_buffer[disp-1] <= left_bitvec;
+			right_buffer[disp-1] <= right_bitvec;
+		end
 
 		// We also use a register to keep track of which parts of the buffer
 		// contains valid values.
@@ -51,7 +55,8 @@ module correlate(
 			buffer_valid <= 0;
 		end
 		else begin
-			buffer_valid <= (buffer_valid << 1) | bitvec_val;
+			if (bitvec_val)
+				buffer_valid <= (buffer_valid << 1) | 1'b1;
 		end
 	end
 

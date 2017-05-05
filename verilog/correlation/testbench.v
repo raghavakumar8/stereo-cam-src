@@ -33,23 +33,36 @@ module testbench();
 	reg	signed	[71:0]	right_bitvec;
 	reg	signed	[71:0]	left_bitvec;
 	reg					bitvec_val;
+	reg					clk_div;
+	reg					test_finished;
 	always @(posedge clk) begin
 		if (reset) begin
 			//right_bitvec <= 72'hFF_FFFF_FFFF_FFFF_FFFF;
 			right_bitvec <= 72'h00_0000_0000_0000_0000;
 			left_bitvec <= 72'd0;
 			bitvec_val <= 0;
+			clk_div <= 0;
+			test_finished <= 0;
 		end
 		else begin
-			if (right_bitvec == 72'hFF_FFFF_FFFF_FFFF_FFFF || right_bitvec == 72'dz) begin
-				right_bitvec <= 72'dz;
-				left_bitvec <= 72'dz;
+			if (right_bitvec == 72'hFF_FFFF_FFFF_FFFF_FFFF || test_finished) begin
 				bitvec_val <= 0;
+				test_finished <= 1;
 			end
 			else begin
-				right_bitvec <= (right_bitvec >>> 1) | 72'h80_0000_0000_0000_0000;
-				left_bitvec <= 72'd0;
-				bitvec_val <= 1;
+				if (clk_div) begin
+					right_bitvec <= (right_bitvec >>> 1) | 72'h80_0000_0000_0000_0000;
+					left_bitvec <= 72'd0;
+					bitvec_val <= 1;
+					clk_div <= 0;
+				end
+				else begin
+					right_bitvec <= right_bitvec;
+					left_bitvec <= 72'd0;
+					bitvec_val <= 0;
+					clk_div <= 1;
+				end
+				test_finished <= 0;
 			end
 		end
 	end
