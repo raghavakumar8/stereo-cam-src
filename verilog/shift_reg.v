@@ -5,12 +5,13 @@ module shift_reg(
 	input			shift,
 
 	// I/O
-	input	[7:0]	sr_in,
-	output	[7:0]	sr_out,
+	input	[NUM_BITS-1:0]	sr_in,
+	output	[NUM_BITS-1:0]	sr_out
 );
+	parameter NUM_BITS = 8;
 	parameter NUM_REGS = 320;
 
-	reg [7:0] sr [NUM_REGS-1:0];
+	reg [NUM_BITS-1:0] sr [NUM_REGS-1:0];
 
 	integer n;
 
