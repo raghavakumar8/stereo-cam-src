@@ -11,7 +11,7 @@ module 	mt9d111(
 	input				reset,
 
 	// Camera Interface
-	output	reg			xclk,
+	output	wire			xclk,
 	input 				pclk,
 
 	input				vsync,
@@ -24,8 +24,8 @@ module 	mt9d111(
 
 	// Memory Interface
 	output	reg	[7:0]	value,
-	output	reg	[9:0]	x_addr,
-	output	reg	[9:0]	y_addr,
+	output	reg	[10:0]	x_addr,
+	output	reg	[10:0]	y_addr,
 
 	output	reg	[18:0]	mem_addr,
 	output	reg			is_val
@@ -35,23 +35,25 @@ module 	mt9d111(
 
 	// Draw a white border around the image
 	always@ (*) begin
-		if (x_addr == 0 || x_addr == 799 || y_addr == 0 || y_addr == 599) begin
-			value <= 8'hFF;
+		if (x_addr == 0 || x_addr == 320 || y_addr == 0 || y_addr == 240) begin
+			value = 8'hFF;
 		end
-		else begin
-			value <= val_temp;
-		end
-	end
 
-	// Drive xclk (25 MHz)
-	always@ (posedge clk_50) begin
-		if (reset == 1'b1) begin
-			xclk <= 1'b0;
-		end
 		else begin
-			xclk <= ~xclk;
+			value = val_temp;
 		end
 	end
+	
+assign xclk = clk_50;
+	// Drive xclk (25 MHz)
+//	always@ (posedge clk_50) begin
+//		if (reset == 1'b1) begin
+//			xclk <= 1'b0;
+//		end
+//		else begin
+//			xclk <= ~xclk;
+//		end
+//	end
 
 	// Control reset and power down
 	always@ (posedge clk_50) begin
@@ -89,10 +91,14 @@ module 	mt9d111(
 				if (is_lsb) begin
 					x_addr <= x_addr + 10'b1;
 					y_addr <= y_addr;
-					mem_addr <= mem_addr + 1;
-
+					if(x_addr < 320 && y_addr < 240) begin
+						mem_addr <= mem_addr + 1;
+						is_val <= 1'b1;
+					end
+					else begin
+						is_val <= 1'b0;
+					end
 					val_temp <= data;
-					is_val <= 1'b1;
 				end
 				else begin
 					x_addr <= x_addr;

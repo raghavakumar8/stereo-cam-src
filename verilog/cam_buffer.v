@@ -76,16 +76,16 @@ module cam_buffer(
 
 
 	// Determine rd_addr using x_addr and y_addr
-	assign rd_addr = x_addr_corr + y_addr_corr*800;
+	assign rd_addr = x_addr_corr + y_addr_corr*320;
 	
 	// Only output memory value if x_addr < 315
-	assign value = (x_addr_corr < 800) ? mem_val : 8'b0;
+	assign value = (x_addr_corr < 320) ? mem_val : 8'b0;
 
-	dual_clock_ram_800_600 frame_buf(
+	dual_clock_ram_320_240 frame_buf(
 		.q(mem_val),
 		.d(wr_val),
-		.write_address(wr_addr[18:0]),
-		.read_address(rd_addr[18:0]),
+		.write_address(wr_addr[16:0]),
+		.read_address(rd_addr[16:0]),
 		.we(is_wr_val),
 		.clk1(pclk),
 		.clk2(rd_clk)
@@ -125,6 +125,28 @@ module dual_clock_ram_315_240(
 );
 	reg			[16:0]	read_address_reg;
 	reg			[7:0]	mem [75599:0];  // 315*240
+
+	always @ (posedge clk1)
+	begin
+		if (we)
+			mem[write_address] <= d;
+ 	end
+
+	always @ (posedge clk2) begin
+		q <= mem[read_address_reg];
+		read_address_reg <= read_address;
+	end
+
+endmodule
+/* Adapted from Altera's Recommended HDL Coding Styles Example 12-16 */
+module dual_clock_ram_320_240(
+	output	reg	[7:0]	q,
+	input		[7:0]	d,
+	input		[16:0] 	write_address, read_address,
+	input 				we, clk1, clk2
+);
+	reg			[16:0]	read_address_reg;
+	reg			[7:0]	mem [76799:0];  // 315*240
 
 	always @ (posedge clk1)
 	begin
