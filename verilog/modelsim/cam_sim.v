@@ -13,7 +13,7 @@ module cam_sim(
 	reg [7:0] img [0:76799]; //320* 240 memory block
 
  	initial begin
- 		$readmemh("a.list", img); // Replace filename to load different images
+ 		$readmemh("b.list", img); // Replace filename to load different images
  	end
 
 	assign pclk = clk;

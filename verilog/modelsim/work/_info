@@ -9,62 +9,142 @@ z2
 cModel Technology
 dC:/altera/15.0
 vcam_sim
-Z0 !s110 1493953269
+!s110 1494042645
 !i10b 1
-!s100 M2IW:JOlBn6Ti[2ODoHh=3
-Id1S`N<SmaJWMOl=ihFXn:1
-Z1 V`JN@9S9cnhjKRR_L]QIcM3
-Z2 dC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim
-w1493953256
+!s100 9]O[Ijg_^X@7lzAf<dY1n2
+Iibj;V0aIH[L:`i=Un:m[T2
+Z0 V`JN@9S9cnhjKRR_L]QIcM3
+Z1 dC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim
+w1494041937
 8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v
 FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v
 L0 2
-Z3 OV;L;10.3d;59
+Z2 OV;L;10.3d;59
 r1
 !s85 0
 31
-!s108 1493953269.058000
+!s108 1494042645.785000
 !s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v|
 !i113 1
-Z4 o-work work
-vtestbench
-R0
+Z3 o-work work
+vconvolve
+Z4 !s110 1494042646
 !i10b 1
-!s100 @0=MP66T=Q27QATHGoAKj1
-IIK8o9Y8`cHPBFndQJ?KHj0
+!s100 JiK@HHE0:[S46>nYImj]I1
+Il^AMPSgVG`H5Ko^LMA0fe2
+R0
 R1
+w1494039999
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v
+L0 2
 R2
-w1493952863
+r1
+!s85 0
+31
+!s108 1494042646.805000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v|
+!i113 1
+R3
+vconvolve_mult
+!s110 1494042647
+!i10b 1
+!s100 CA3JjJOZ];E>BT5Cz<hYj1
+Ig?33Ie_JgOde>SBT=98?]0
+R0
+R1
+w1494035672
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v
+L0 5
+R2
+r1
+!s85 0
+31
+!s108 1494042647.057000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v|
+!i113 1
+R3
+vshift_reg
+R4
+!i10b 1
+!s100 aJEdMfK21D;>KULFjmkOJ0
+IkGo08nc]b`Do3Vc@bRf]@3
+R0
+R1
+w1494042514
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v
+L0 3
+R2
+r1
+!s85 0
+31
+!s108 1494042646.526000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v|
+!i113 1
+R3
+vsigned_mult
+!s110 1494030167
+!i10b 1
+!s100 _c<`ikizSa]=NVaoaJU2;0
+IB1ae8BW_LHkiC38zoE>XG3
+R0
+R1
+w1494023461
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/signed_mult.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/signed_mult.v
+L0 2
+R2
+r1
+!s85 0
+31
+!s108 1494030167.223000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/signed_mult.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/signed_mult.v|
+!i113 1
+R3
+vtestbench
+R4
+!i10b 1
+!s100 UzW:HzFKEX`^cIBT5jU<T2
+I:A]ZS9C_?j4?VYO8K2W=R2
+R0
+R1
+w1494042529
 8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v
 FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v
 L0 3
-R3
+R2
 r1
 !s85 0
 31
-!s108 1493953269.298000
+!s108 1494042646.021000
 !s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v|
 !i113 1
-R4
+R3
 vvga_buf_sim
-R0
+R4
 !i10b 1
-!s100 ObOKFOXga@[QA226N3l@70
-IM>9doj7YQdWZCV9Pj:k=21
+!s100 @0<B=iPMA7OQPJ5OM`QWP3
+I4NJ2:A>5@nkI:E4SSS^NY0
+R0
 R1
-R2
-w1493953004
+w1494041472
 8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v
 FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v
 L0 2
-R3
+R2
 r1
 !s85 0
 31
-!s108 1493953269.567000
+!s108 1494042646.288000
 !s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v|
 !s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v|
 !i113 1
-R4
+R3
