@@ -1,12 +1,15 @@
 module correlate(
 	clk, reset,
 	left_bitvec, right_bitvec, bitvec_val,
-	pixel_x, pixel_y,
+	input_x, input_y,
+	out_x, out_y,
 	disparity_val, disparity
 );
 	// Local parameters
 	localparam			disp = 64;		// Number of disparities
 	localparam			bv_len = 72;	// Bit vector length
+	localparam			F_WIDTH = 320;
+	localparam			F_HEIGHT = 240;
 
 	// Inputs and outputs
 	input						clk;
@@ -16,16 +19,32 @@ module correlate(
 	input		[bv_len-1:0]	right_bitvec;
 	input						bitvec_val;
 
-	input		[9:0]			pixel_x;
-	input		[9:0]			pixel_y;
+	input		[9:0]			input_x;
+	input		[9:0]			input_y;
+
+	output	reg	[9:0]			out_x;
+	output	reg	[9:0]			out_y;
 
 	output	reg					disparity_val;
 	output	reg [$clog2(disp)-1:0]	disparity;
 
+	// Registers for the input pixel X and Y coordinates
+	reg			[9:0]			input_x_reg;
+	reg			[9:0]			input_y_reg;
+
+	// Store the X and Y coordinates of the input pixel so we
+	// can calculate the output pixel's X and Y
+	always @(posedge clk) begin
+		if (bitvec_val) begin
+			input_x_reg <= input_x;
+			input_y_reg <= input_y;
+		end
+	end
+
 	// Registers for the bitvec shift buffer
 	reg			[bv_len-1:0]	left_buffer[disp-1:0];
 	reg			[bv_len-1:0]	right_buffer[disp-1:0];
-	reg			[bv_len-1:0]	buffer_valid;
+	reg			[disp-1:0]		buffer_valid;
 
 	// Generate the bitvec shift buffer structure
 	// d is the number of disparities
@@ -65,6 +84,8 @@ module correlate(
 	parameter						dval_width = $clog2(bv_len);
 	reg			[dval_width-1:0]	disparity_value[disp-1:0];
 	reg								xor_sum_valid;
+	reg			[9:0]				xor_sum_x;
+	reg			[9:0]				xor_sum_y;
 	genvar j;
 	generate
 	    for (j = 0; j < disp; j = j + 1) begin: XOR_AND_ADD
@@ -92,6 +113,8 @@ module correlate(
 	reg			[$clog2(disp)-1:0] 	L1_disparity_idx[disp/2-1:0];
 	reg			[dval_width-1:0] 	L1_disparity_val[disp/2-1:0];
 	reg								L1_disp_valid;
+	reg			[9:0]				L1_disp_x;
+	reg			[9:0]				L1_disp_y;
 	genvar a;
 	generate
 		for (a = 0; a < disp/2; a = a + 1) begin: COMPARE_LEVEL1
@@ -112,6 +135,8 @@ module correlate(
 	reg			[$clog2(disp)-1:0] 	L2_disparity_idx[disp/4-1:0];
 	reg			[dval_width-1:0] 	L2_disparity_val[disp/4-1:0];
 	reg								L2_disp_valid;
+	reg			[9:0]				L2_disp_x;
+	reg			[9:0]				L2_disp_y;
 	genvar b;
 	generate
 		for (b = 0; b < disp/4; b = b + 1) begin: COMPARE_LEVEL2
@@ -132,6 +157,8 @@ module correlate(
 	reg			[$clog2(disp)-1:0] 	L3_disparity_idx[disp/8-1:0];
 	reg			[dval_width-1:0] 	L3_disparity_val[disp/8-1:0];
 	reg								L3_disp_valid;
+	reg			[9:0]				L3_disp_x;
+	reg			[9:0]				L3_disp_y;
 	genvar c;
 	generate
 		for (c = 0; c < disp/8; c = c + 1) begin: COMPARE_LEVEL3
@@ -152,6 +179,8 @@ module correlate(
 	reg			[$clog2(disp)-1:0] 	L4_disparity_idx[disp/16-1:0];
 	reg			[dval_width-1:0] 	L4_disparity_val[disp/16-1:0];
 	reg								L4_disp_valid;
+	reg			[9:0]				L4_disp_x;
+	reg			[9:0]				L4_disp_y;
 	genvar d;
 	generate
 		for (d = 0; d < disp/16; d = d + 1) begin: COMPARE_LEVEL4
@@ -172,6 +201,8 @@ module correlate(
 	reg			[$clog2(disp)-1:0] 	L5_disparity_idx[disp/32-1:0];
 	reg			[dval_width-1:0] 	L5_disparity_val[disp/32-1:0];
 	reg								L5_disp_valid;
+	reg			[9:0]				L5_disp_x;
+	reg			[9:0]				L5_disp_y;
 	genvar e;
 	generate
 		for (e = 0; e < disp/32; e = e + 1) begin: COMPARE_LEVEL5
@@ -223,6 +254,50 @@ module correlate(
 			L4_disp_valid <= L3_disp_valid;
 			L5_disp_valid <= L4_disp_valid;
 			disparity_val <= L5_disp_valid;
+		end
+	end
+
+	// Also propagate the output X and Y values, similar to the val bit
+	always @(posedge clk) begin
+		if (reset) begin
+			xor_sum_x <= 0;
+			xor_sum_y <= 0;
+			L1_disp_x <= 0;
+			L1_disp_y <= 0;
+			L2_disp_x <= 0;
+			L2_disp_y <= 0;
+			L3_disp_x <= 0;
+			L3_disp_y <= 0;
+			L4_disp_x <= 0;
+			L4_disp_y <= 0;
+			L5_disp_x <= 0;
+			L5_disp_y <= 0;
+			out_x <= 0;
+			out_y <= 0;
+		end
+		else begin
+			// Here, we compute the output X and Y values
+			// For X, we need to check whether we have wrapped around to a new row (in_x < disp - 1)
+			// If so, then we are still outputting on the previous row
+			xor_sum_x <= input_x_reg < (disp - 1) ? 
+				F_WIDTH - (disp - (input_x_reg + 1)) : input_x_reg - (disp - 1);
+			// Similarly for Y, we do the same wrap around check
+			// Additionally, we also check if we have wrapped around to a new frame (in_y == 0)
+			// If so, then we are still outputting on the previous frame
+			xor_sum_y <= input_x_reg < (disp - 1) ? 
+				(input_y_reg == 0 ? F_HEIGHT - 1 : input_y_reg - 1) : input_y_reg;
+			L1_disp_x <= xor_sum_x;
+			L1_disp_y <= xor_sum_y;
+			L2_disp_x <= L1_disp_x;
+			L2_disp_y <= L1_disp_y;
+			L3_disp_x <= L2_disp_x;
+			L3_disp_y <= L2_disp_y;
+			L4_disp_x <= L3_disp_x;
+			L4_disp_y <= L3_disp_y;
+			L5_disp_x <= L4_disp_x;
+			L5_disp_y <= L4_disp_y;
+			out_x <= L5_disp_x;
+			out_y <= L5_disp_y;
 		end
 	end
 
