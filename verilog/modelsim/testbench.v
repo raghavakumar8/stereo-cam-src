@@ -31,28 +31,53 @@ module testbench();
 
 	// Local wires
 	wire			pclk;
-	wire	[7:0]	value;
-	wire	[9:0]	x;
-	wire	[9:0]	y;
-	wire			is_val;
+	wire	[7:0]	cam_val;
+	wire	[9:0]	cam_x;
+	wire	[9:0]	cam_y;
+	wire			is_cam_val;
 
 	cam_sim my_cam(
 		.clk(clk),
 		.reset(reset),
 		.pclk(pclk),
-		.value(value),
-		.x(x),
-		.y(y),
-		.is_val(is_val)
+		.value(cam_val),
+		.x(cam_x),
+		.y(cam_y),
+		.is_val(is_cam_val)
+	);
+
+	wire	[7:0]	conv_val;
+	wire	[9:0]	conv_x;
+	wire	[9:0]	conv_y;
+	wire			is_conv_val;
+
+	convolve #(3,320,240) my_convolver(
+		.clk(pclk),
+		.reset(reset),
+
+		.in_val(cam_val),
+		.in_x(cam_x),
+		.in_y(cam_y),
+		.is_in_val(is_cam_val),
+
+		.out_val(conv_val),
+		.out_x(conv_x),
+		.out_y(conv_y),
+		.is_out_val(is_conv_val),
+
+		// Convolution kernel represented as a single bit vector
+		.kernel({8'h01, 8'h02, 8'h01,
+				 8'h02, 8'h04, 8'h02,
+				 8'h01, 8'h02, 8'h01})
 	);
 
 	vga_buf_sim my_vga(
 		.pclk(pclk),
 		.reset(reset),
-		.value(value),
-		.x(x),
-		.y(y),
-		.is_val(is_val)
+		.value(conv_val),
+		.x(conv_x),
+		.y(conv_y),
+		.is_val(is_conv_val)
 	);
 
 	// Print statements, etc

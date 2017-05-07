@@ -1,6 +1,6 @@
 /* Shift register for streaming pixel-processing.
    Based on Altera's Recommended HDL Coding Styles, Example 12-37 */
-module shift_reg(
+module shift_reg  #(parameter NUM_BITS = 8, parameter NUM_REGS = 320)(
 	input			clk, 
 	input			shift,
 
@@ -8,8 +8,6 @@ module shift_reg(
 	input	[NUM_BITS-1:0]	sr_in,
 	output	[NUM_BITS-1:0]	sr_out
 );
-	parameter NUM_BITS = 8;
-	parameter NUM_REGS = 320;
 
 	reg [NUM_BITS-1:0] sr [NUM_REGS-1:0];
 
@@ -17,7 +15,7 @@ module shift_reg(
 
 	always @ (posedge clk) begin
 		// Shift!
-		if (shift == 1'b1)	begin
+		if (shift == 1'b1) begin
 			for (n = NUM_REGS-1; n > 0; n = n-1) begin
 				sr[n] <= sr[n-1];
 			end
