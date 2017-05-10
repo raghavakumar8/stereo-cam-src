@@ -1,4 +1,4 @@
-module correlate(
+module correlate #(parameter F_WIDTH = 320, parameter F_HEIGHT = 240)(
 	clk, reset,
 	left_bitvec, right_bitvec, bitvec_val,
 	input_x, input_y,
@@ -8,8 +8,6 @@ module correlate(
 	// Local parameters
 	localparam			disp = 64;		// Number of disparities
 	localparam			bv_len = 72;	// Bit vector length
-	localparam			F_WIDTH = 320;
-	localparam			F_HEIGHT = 240;
 
 	// Inputs and outputs
 	input						clk;
@@ -27,6 +25,9 @@ module correlate(
 
 	output	reg					disparity_val;
 	output	reg [$clog2(disp)-1:0]	disparity;
+
+	// Regsiter to buffer the input valid bit
+	reg							bitvec_val_reg;
 
 	// Registers for the input pixel X and Y coordinates
 	reg			[9:0]			input_x_reg;
@@ -91,7 +92,7 @@ module correlate(
 	    for (j = 0; j < disp; j = j + 1) begin: XOR_AND_ADD
 	    	// First XOR the left and right bitvecs
 	    	wire 	[bv_len-1:0]	xor_output;
-	    	assign xor_output = left_buffer[j] ^ right_buffer[j];
+	    	assign xor_output = left_buffer[j] ^ right_buffer[0];
 
 	    	// Then sum up the number of ones in the bitvec
 	    	integer i;
@@ -236,6 +237,7 @@ module correlate(
 	// the output disparity value is valid or not. 
 	always @(posedge clk) begin
 		if (reset) begin
+			bitvec_val_reg <= 0;
 			xor_sum_valid <= 0;
 			L1_disp_valid <= 0;
 			L2_disp_valid <= 0;
@@ -247,7 +249,8 @@ module correlate(
 		else begin
 			// The output of the first stage (xor and sum) is valid if all of 
 			// the inputs, which are the shift buffers, are valid.
-			xor_sum_valid <= &buffer_valid;
+			bitvec_val_reg <= bitvec_val;
+			xor_sum_valid <= (&buffer_valid) & bitvec_val_reg;
 			L1_disp_valid <= xor_sum_valid;
 			L2_disp_valid <= L1_disp_valid;
 			L3_disp_valid <= L2_disp_valid;

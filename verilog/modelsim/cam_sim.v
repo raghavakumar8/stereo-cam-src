@@ -1,5 +1,5 @@
 /* Reads image from file, emulating a camera. */
-module cam_sim(
+module cam_sim #(parameter LR = 0, parameter ROW_SZ = 320, parameter COL_SZ = 240)(
 	input				clk,
 	input				reset,
 
@@ -9,21 +9,26 @@ module cam_sim(
 	output		[9:0]	y,
 	output	reg			is_val
 );
-
-	reg [7:0] img [0:76799]; //320* 240 memory block
+	
+	reg [7:0] img [0:(ROW_SZ)*(COL_SZ)-1];
 
  	initial begin
- 		$readmemh("b.list", img); // Replace filename to load different images
+ 		if (LR == 0) begin
+ 			$readmemh("cones_l.list", img); // Replace filename to load different images
+ 		end
+ 		else begin
+ 			$readmemh("cones_r.list", img); // Replace filename to load different images
+ 		end
  	end
 
 	assign pclk = clk;
 
-	reg	[16:0]	mem_addr;
+	reg	[19:0]	mem_addr;
 	reg			this_time;
 
 	// Output x, y
-	assign x = (mem_addr == 17'b0) ? 319 : (mem_addr-1) % 320;
-	assign y = (mem_addr == 17'b0) ? 239 : (mem_addr-1) / 320;
+	assign x = (mem_addr == 20'b0) ? ROW_SZ-1 : (mem_addr-1) % ROW_SZ;
+	assign y = (mem_addr == 20'b0) ? COL_SZ-1 : (mem_addr-1) / ROW_SZ;
 
 	// Output pixels on alternate clock cycles
 	always@ (posedge clk) begin
@@ -31,7 +36,7 @@ module cam_sim(
 			this_time <= 1'b0;
 
 			value <= 8'b0;
-			mem_addr <= 17'd0;
+			mem_addr <= 20'd0;
 			is_val <= 1'b0;
 		end
 		else begin
@@ -39,11 +44,11 @@ module cam_sim(
 				value <= img[mem_addr];
 				is_val <= 1'b1;
 
-				if (mem_addr < 17'd76799) begin
-					mem_addr <= mem_addr + 17'd1;
+				if (mem_addr < (ROW_SZ)*(COL_SZ)-1) begin
+					mem_addr <= mem_addr + 20'd1;
 				end
 				else begin
-					mem_addr <= 17'd0;
+					mem_addr <= 20'd0;
 				end
 			end
 			else begin
