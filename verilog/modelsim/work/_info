@@ -1,0 +1,210 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/altera/15.0
+vcam_sim
+Z0 !s110 1494386037
+!i10b 1
+!s100 ;oQQYiQ11nahY7MJ2O;Ik3
+I_2W?3o4ibiJ;Q6bOeFC401
+Z1 V`JN@9S9cnhjKRR_L]QIcM3
+Z2 dC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim
+w1494374914
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v
+L0 2
+Z3 OV;L;10.3d;59
+r1
+!s85 0
+31
+!s108 1494386037.517000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v|
+!i113 1
+Z4 o-work work
+vcensus_window
+Z5 !s110 1494386039
+!i10b 1
+!s100 kG=>8bgS`O:o14fiS0?Po1
+I;Rdl0m7m:Xh<?VDF5gj8R1
+R1
+R2
+Z6 w1494356059
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/census_window.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/census_window.v
+L0 2
+R3
+r1
+!s85 0
+31
+!s108 1494386039.518000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/census_window.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/census_window.v|
+!i113 1
+R4
+vconvolve
+Z7 !s110 1494386038
+!i10b 1
+!s100 JiK@HHE0:[S46>nYImj]I1
+Il^AMPSgVG`H5Ko^LMA0fe2
+R1
+R2
+R6
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v
+L0 2
+R3
+r1
+!s85 0
+31
+!s108 1494386038.817000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v|
+!i113 1
+R4
+vconvolve_mult
+R7
+!i10b 1
+!s100 CA3JjJOZ];E>BT5Cz<hYj1
+Ig?33Ie_JgOde>SBT=98?]0
+R1
+R2
+R6
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v
+L0 5
+R3
+r1
+!s85 0
+31
+!s108 1494386038.988000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v|
+!i113 1
+R4
+vcorrelate
+R5
+!i10b 1
+!s100 Kb1JFVRd^VZN4n<OVDn9^1
+If0@DnmPC?8EnaCdoln>_52
+R1
+R2
+w1494382522
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/correlation/correlate.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/correlation/correlate.v
+L0 1
+R3
+r1
+!s85 0
+31
+!s108 1494386039.772000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/correlation/correlate.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/correlation/correlate.v|
+!i113 1
+R4
+vshift_reg
+R7
+!i10b 1
+!s100 aJEdMfK21D;>KULFjmkOJ0
+IkGo08nc]b`Do3Vc@bRf]@3
+R1
+R2
+R6
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v
+L0 3
+R3
+r1
+!s85 0
+31
+!s108 1494386038.556000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v|
+!i113 1
+R4
+vsigned_mult
+!s110 1494030167
+!i10b 1
+!s100 _c<`ikizSa]=NVaoaJU2;0
+IB1ae8BW_LHkiC38zoE>XG3
+R1
+R2
+w1494023461
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/signed_mult.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/signed_mult.v
+L0 2
+R3
+r1
+!s85 0
+31
+!s108 1494030167.223000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/signed_mult.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/signed_mult.v|
+!i113 1
+R4
+vsp_census
+R5
+!i10b 1
+!s100 ^DaWfBVVI1<MK^1IN0OT91
+Ieoji2`>lNPL[[D2c_6M^c0
+R1
+R2
+R6
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/sp_census.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/sp_census.v
+L0 2
+R3
+r1
+!s85 0
+31
+!s108 1494386039.241000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/sp_census.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/sp_census.v|
+!i113 1
+R4
+vtestbench
+R0
+!i10b 1
+!s100 N1RP]<JmT9?7B9UNdcP@W0
+IhmSK4]T;AgL]Qk8SS:SZl3
+R1
+R2
+w1494382917
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v
+L0 3
+R3
+r1
+!s85 0
+31
+!s108 1494386037.788000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v|
+!i113 1
+R4
+vvga_buf_sim
+R7
+!i10b 1
+!s100 @0<B=iPMA7OQPJ5OM`QWP3
+I4NJ2:A>5@nkI:E4SSS^NY0
+R1
+R2
+R6
+8C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v
+FC:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v
+L0 2
+R3
+r1
+!s85 0
+31
+!s108 1494386038.056000
+!s107 C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v|
+!s90 -reportprogress|300|-work|work|-stats=none|C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v|
+!i113 1
+R4

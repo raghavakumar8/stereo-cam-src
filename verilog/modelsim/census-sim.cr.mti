@@ -1,0 +1,64 @@
+{C:/Users/Lab User/Desktop/stereo-cam-src/verilog/correlation/correlate.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/correlation/correlate.v}
+Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+-- Compiling module correlate
+
+Top level modules:
+	correlate
+
+} {} {}} {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/cam_sim.v}
+Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+-- Compiling module cam_sim
+
+Top level modules:
+	cam_sim
+
+} {} {}} {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/sp_census.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/sp_census.v}
+Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+-- Compiling module sp_census
+
+Top level modules:
+	sp_census
+
+} {} {}} {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/shift_reg.v}
+Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+-- Compiling module shift_reg
+
+Top level modules:
+	shift_reg
+
+} {} {}} {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/census_window.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/census_window.v}
+Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+-- Compiling module census_window
+
+Top level modules:
+	census_window
+
+} {} {}} {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve.v}
+Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+-- Compiling module convolve
+
+Top level modules:
+	convolve
+
+} {} {}} {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/vga_buf_sim.v}
+Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+-- Compiling module vga_buf_sim
+
+Top level modules:
+	vga_buf_sim
+
+} {} {}} {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/convolve_census/convolve_mult.v}
+Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+-- Compiling module convolve_mult
+
+Top level modules:
+	convolve_mult
+
+} {} {}} {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v} {1 {vlog -work work -stats=none {C:/Users/Lab User/Desktop/stereo-cam-src/verilog/modelsim/testbench.v}
+Model Technology ModelSim ALTERA vlog 10.3d Compiler 2014.10 Oct  7 2014
+-- Compiling module testbench
+
+Top level modules:
+	testbench
+
+} {} {}}
