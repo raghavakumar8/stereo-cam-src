@@ -19,8 +19,8 @@ function disparity_map = census_match(left, right, maxdisp)
 % left = l1;
 % right = r1;
 
-%left = conv2(left, ones(5,5), 'same');
-%right = conv2(right, ones(5,5), 'same');
+left = conv2(left, ones(3,3), 'same');
+right = conv2(right, ones(3,3), 'same');
 
 [m n]=size(left);
 
@@ -43,6 +43,7 @@ corrSumKernel =window'*window; %should probably be made two separate
 leftCen = zeros(m-windowSize+1, n-windowSize+1, 3*3);
 rightCen = zeros(m-windowSize+1, n-windowSize+1, 3*3);
 leftCenVis = zeros(m-windowSize+1, n-windowSize+1);
+rightCenVis = zeros(m-windowSize+1, n-windowSize+1);
 
 %Generate the censur matrix for both left and right images
 for y=1:m-windowSize+1
@@ -67,6 +68,11 @@ leftCenVis = 128*leftCen(:,:,1) + 64*leftCen(:,:,2) + 32*leftCen(:,:,3) ...
     + 16*leftCen(:,:,4) + 8*leftCen(:,:,6) + 4*leftCen(:,:,7) ... 
     + 2*leftCen(:,:,8) + leftCen(:,:,9);
 figure;imagesc(leftCenVis);colormap(gray);axis image;
+
+rightCenVis = 128*rightCen(:,:,1) + 64*rightCen(:,:,2) + 32*rightCen(:,:,3) ...
+    + 16*rightCen(:,:,4) + 8*rightCen(:,:,6) + 4*rightCen(:,:,7) ... 
+    + 2*rightCen(:,:,8) + rightCen(:,:,9);
+figure;imagesc(rightCenVis);colormap(gray);axis image;
 
 %do the census windowing
 [cen_m, cen_n, cen_l] = size(leftCen);
@@ -97,12 +103,16 @@ h = waitbar(0,'Computing disparity...');
 set(h,'Name','Disparity progress');
 
 [cenwnd_m, cenwnd_n, cenwnd_l] = size(leftCenWnd);
-for d=0:maxdisp
+
+% CHANGE THIS TO SET THE CENSUS OFFSET AMOUNT
+CENSUS_OFFSET = 64;
+
+for d=0:(maxdisp)
     diss(:) = Inf;
     
     for y = 1:cenwnd_m
-        for x = 1:cenwnd_n-d
-            leftCenVec = leftCenWnd(y, x+d, :);
+        for x = 1:cenwnd_n-(d+CENSUS_OFFSET)
+            leftCenVec = leftCenWnd(y, x+d+CENSUS_OFFSET, :);
             rightCenVec = rightCenWnd(y, x, :);
             
             hammingVec = xor(leftCenVec, rightCenVec);
@@ -114,7 +124,7 @@ for d=0:maxdisp
     
     %img(:,:,d+1) = conv2(diss,corrSumKernel,'same');
     img(:,:,d+1) = diss;
-    waitbar(d/maxdisp);
+    waitbar((d)/maxdisp);
 end
 
 % Close waitbar.
