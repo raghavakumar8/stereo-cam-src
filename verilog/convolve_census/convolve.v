@@ -9,9 +9,9 @@ module convolve #(parameter KRNL_SZ = 5, parameter ROW_SZ = 320, parameter COL_S
 	input				is_in_val,
 
 	output		[7:0]	out_val,
-	output		[9:0]	out_x,
-	output		[9:0]	out_y,
-	output				is_out_val,
+	output	reg	[9:0]	out_x,
+	output	reg	[9:0]	out_y,
+	output	reg			is_out_val,
 
 	// Convolution kernel represented as a single bit vector.
 	// kernel value @ (i,j) is kernel[(N*8)+7 : N*8] where N = KRNL_SZ*i + j
@@ -47,8 +47,10 @@ module convolve #(parameter KRNL_SZ = 5, parameter ROW_SZ = 320, parameter COL_S
 	end
 
 	// Determine X,Y position of the output pixel based on the X,Y position of the pixel at the input of the buffer
-	assign out_x = in_x_reg < (ROW_SZ-(KRNL_SZ/2)-1) ? (in_x_reg + ROW_SZ) - (ROW_SZ-(KRNL_SZ/2)-1) : in_x_reg - (ROW_SZ-(KRNL_SZ/2)-1);
-	assign out_y = out_x <= (KRNL_SZ/2) ? (in_y_reg < 1 ? COL_SZ-1 : in_y_reg-1) : (in_y_reg < 2 ? COL_SZ-2+in_y_reg : in_y_reg-2);
+	wire		[9:0]	out_x_stg0;
+	wire		[9:0]	out_y_stg0;
+	assign out_x_stg0 = in_x_reg < (ROW_SZ-(KRNL_SZ/2)-1) ? (in_x_reg + ROW_SZ) - (ROW_SZ-(KRNL_SZ/2)-1) : in_x_reg - (ROW_SZ-(KRNL_SZ/2)-1);
+	assign out_y_stg0 = out_x <= (KRNL_SZ/2) ? (in_y_reg < 1 ? COL_SZ-1 : in_y_reg-1) : (in_y_reg < 2 ? COL_SZ-2+in_y_reg : in_y_reg-2);
 
 	// Shift validity to the left as bits stream in
 	always@ (posedge clk) begin
@@ -63,7 +65,8 @@ module convolve #(parameter KRNL_SZ = 5, parameter ROW_SZ = 320, parameter COL_S
 	end
 
 	// Output is valid for a single cycle if the center of the convolution kernel is valid.
-	assign is_out_val = is_in_val & is_buf_val[ROW_SZ*(KRNL_SZ/2) + (ROW_SZ-KRNL_SZ) + (KRNL_SZ/2)];
+	wire				is_out_val_stg0;
+	assign is_out_val_stg0 = is_in_val & is_buf_val[ROW_SZ*(KRNL_SZ/2) + (ROW_SZ-KRNL_SZ) + (KRNL_SZ/2)];
 
 	// Generate and hook up shift registers
 	genvar i, j;
@@ -133,8 +136,10 @@ module convolve #(parameter KRNL_SZ = 5, parameter ROW_SZ = 320, parameter COL_S
 	endgenerate
 
 	// Determine output by multiplying conv_r with kernel and summing things up
-	// multiply result @ (i,j) is conv_r[KRNL_SZ*i + j]*kernel[((KRNL_SZ*k + l)*8 + 7) : (KRNL_SZ*k + l)*8]
+	// multiply result @ (i,j) is: conv_r[KRNL_SZ*i + j]*
+	// kernel[((KRNL_SZ*KRNL_SZ - KRNL_SZ*i - j)*8 - 1) : (KRNL_SZ*KRNL_SZ - KRNL_SZ*k - i - j)*8]
 	wire	signed	[15:0] mult [(KRNL_SZ*KRNL_SZ)-1 : 0];
+	reg		signed	[15:0] mult_reg [(KRNL_SZ*KRNL_SZ)-1 : 0];
 	genvar k, l;
 	generate
 
@@ -142,11 +147,14 @@ module convolve #(parameter KRNL_SZ = 5, parameter ROW_SZ = 320, parameter COL_S
 			for (l = 0; l < KRNL_SZ; l = l + 1) begin: MULT_INNER
 				
 				convolve_mult my_mult(
-					mult[KRNL_SZ*k + l],
-					conv_r[KRNL_SZ*k + l],
-					kernel[((KRNL_SZ*k + l)*8 + 7) : (KRNL_SZ*k + l)*8]
+					.out(mult[KRNL_SZ*k + l]),
+					.a(conv_r[KRNL_SZ*k + l]),
+					.b(kernel[((KRNL_SZ*KRNL_SZ - KRNL_SZ*k - l)*8 - 1) : (KRNL_SZ*KRNL_SZ - KRNL_SZ*k - l - 1)*8])
 				);
 
+				always @(posedge clk) begin
+					mult_reg[KRNL_SZ*k + l] <= mult[KRNL_SZ*k + l];
+				end
 			end
 		end
 
@@ -154,11 +162,27 @@ module convolve #(parameter KRNL_SZ = 5, parameter ROW_SZ = 320, parameter COL_S
 
 	integer sum_i;
 
+	// The convolve is pipelined so that the summation occurs on the next cycle
+	// Will need to pipeline the X, Y, and valid signals too
+	always @(posedge clk) begin
+		if (reset) begin
+			out_x <= 0;
+			out_y <= 0;
+			is_out_val <= 0;
+		end
+		else begin
+			out_x <= out_x_stg0;
+			out_y <= out_y_stg0;
+			is_out_val <= is_out_val_stg0;
+		end
+	end
+
+	// Sum up the convolve values
 	reg		signed	[15:0]	conv_sum;
 	always@ (*) begin
 	 	conv_sum = 16'b0;
 		for(sum_i = 0; sum_i < (KRNL_SZ*KRNL_SZ); sum_i = sum_i + 1) begin
-			conv_sum = conv_sum + mult[sum_i];
+			conv_sum = conv_sum + mult_reg[sum_i];
 		end
 	end
 
