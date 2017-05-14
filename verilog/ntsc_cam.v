@@ -17,7 +17,7 @@ module 	NTSC_Cam(
 	output	reg [9:0]	out_y,
 	output	reg [7:0]	out_left,
 	output	reg [7:0]	out_right,
-	output	reg			out_is_val,
+	output	reg			out_is_val
 );
 	localparam XSTART	= 0;
 	localparam XSEP		= 320; // Where the right image starts
@@ -35,8 +35,7 @@ module 	NTSC_Cam(
 	assign cam_clk = ntsc_clk;
 
 	wire		[7:0]	Y_bord; // Y with border
-	assign Y_bord = (req_x == LEFBORD || req_x == RIGBORD) || 
-		(req_y == TOPBORD || req_y == BOTBORD) ? 8'hFF : Y;
+	assign Y_bord = Y; // No border implemented
 
 	// Shift register for buffering the row from the right "cam"
 	wire		[7:0]	right_buf_out;
@@ -89,7 +88,12 @@ module 	NTSC_Cam(
 					out_x <= req_x - XSEP;
 					out_y <= req_y;
 					out_left <= Y_bord;
-					out_right <= right_buf_out;
+					if (out_x < XSEP - LEFBORD) begin
+						out_right <= right_buf_out;
+					end
+					else begin
+						out_right <= 8'h00;
+					end
 					out_is_val <= 1;
 				end
 			end
