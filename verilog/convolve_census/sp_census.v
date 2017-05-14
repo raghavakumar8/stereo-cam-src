@@ -2,6 +2,7 @@
 module sp_census #(parameter ROW_SZ = 320, parameter COL_SZ = 240)(
 	input		clk,
 	input		reset,
+	input		[7:0]	thresh,
 
 	input		[7:0]	in_val,
 	input		[9:0]	in_x,
@@ -38,6 +39,12 @@ module sp_census #(parameter ROW_SZ = 320, parameter COL_SZ = 240)(
 			in_x_reg <= in_x;
 			in_y_reg <= in_y;
 		end
+	end
+
+	// Threshold for improve performance with camera noise
+	reg		[7:0] threshold;
+	always @(posedge clk) begin
+		threshold <= thresh;
 	end
 
 	// Determine X,Y position of the output pixel based on the X,Y position of the pixel at the input of the buffer
@@ -127,13 +134,13 @@ module sp_census #(parameter ROW_SZ = 320, parameter COL_SZ = 240)(
 	endgenerate
 
 	// Determine output by calculating a 8-point sparse census in the census region.
-	assign out_val[0] = (conv_r[CEN_SZ*0 + 0] < conv_r[CEN_SZ*2 + 2]) ? 1'b1 : 1'b0;
-	assign out_val[1] = (conv_r[CEN_SZ*0 + 2] < conv_r[CEN_SZ*2 + 2]) ? 1'b1 : 1'b0;
-	assign out_val[2] = (conv_r[CEN_SZ*0 + 4] < conv_r[CEN_SZ*2 + 2]) ? 1'b1 : 1'b0;
-	assign out_val[3] = (conv_r[CEN_SZ*2 + 0] < conv_r[CEN_SZ*2 + 2]) ? 1'b1 : 1'b0;
-	assign out_val[4] = (conv_r[CEN_SZ*2 + 4] < conv_r[CEN_SZ*2 + 2]) ? 1'b1 : 1'b0;
-	assign out_val[5] = (conv_r[CEN_SZ*4 + 0] < conv_r[CEN_SZ*2 + 2]) ? 1'b1 : 1'b0;
-	assign out_val[6] = (conv_r[CEN_SZ*4 + 2] < conv_r[CEN_SZ*2 + 2]) ? 1'b1 : 1'b0;
-	assign out_val[7] = (conv_r[CEN_SZ*4 + 4] < conv_r[CEN_SZ*2 + 2]) ? 1'b1 : 1'b0;
+	assign out_val[0] = (conv_r[CEN_SZ*0 + 0] < conv_r[CEN_SZ*2 + 2] - threshold) ? 1'b1 : 1'b0;
+	assign out_val[1] = (conv_r[CEN_SZ*0 + 2] < conv_r[CEN_SZ*2 + 2] - threshold) ? 1'b1 : 1'b0;
+	assign out_val[2] = (conv_r[CEN_SZ*0 + 4] < conv_r[CEN_SZ*2 + 2] - threshold) ? 1'b1 : 1'b0;
+	assign out_val[3] = (conv_r[CEN_SZ*2 + 0] < conv_r[CEN_SZ*2 + 2] - threshold) ? 1'b1 : 1'b0;
+	assign out_val[4] = (conv_r[CEN_SZ*2 + 4] < conv_r[CEN_SZ*2 + 2] - threshold) ? 1'b1 : 1'b0;
+	assign out_val[5] = (conv_r[CEN_SZ*4 + 0] < conv_r[CEN_SZ*2 + 2] - threshold) ? 1'b1 : 1'b0;
+	assign out_val[6] = (conv_r[CEN_SZ*4 + 2] < conv_r[CEN_SZ*2 + 2] - threshold) ? 1'b1 : 1'b0;
+	assign out_val[7] = (conv_r[CEN_SZ*4 + 4] < conv_r[CEN_SZ*2 + 2] - threshold) ? 1'b1 : 1'b0;
 
 endmodule
