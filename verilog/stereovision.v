@@ -1,7 +1,7 @@
 module stereo(
 	input				clk,
 	input				reset,
-	input		[7:0] census_thresh,
+	input		[7:0] 	census_thresh,
 	input		[9:0]	in_x,
 	input		[9:0]	in_y,
 	input		[7:0]	in_left,
@@ -11,7 +11,14 @@ module stereo(
 	output		[9:0]	out_x,
 	output		[9:0]	out_y,
 	output		[7:0]	out_stereo,
-	output				out_is_val
+	output				out_is_val,
+
+	// Debug and demo interfaces (connects to VGA)
+	input		[1:0]	debug_selector,
+	output		[9:0]	debug_out_x,
+	output		[9:0]	debug_out_y,
+	output		[7:0]	debug_out,
+	output				debug_out_is_val
 );
 	localparam row_sz = 447;
 	localparam col_sz = 370;
@@ -173,4 +180,50 @@ module stereo(
 	assign out_y 		= corr_out_y;
 	assign out_stereo	= {disp_out_val, 2'b0};
 	assign out_is_val	= is_disp_out_val;
+
+	// Debugging outputs
+	reg		[9:0]	debug_out_x_reg;
+	reg		[9:0]	debug_out_y_reg;
+	reg		[7:0]	debug_out_reg;
+	reg				debug_out_is_val_reg;
+
+	assign debug_out_x 		= debug_out_x_reg;
+	assign debug_out_y 		= debug_out_y_reg;
+	assign debug_out		= debug_out_reg;
+	assign debug_out_is_val	= debug_out_is_val_reg;
+
+	always @(*) begin
+		case (debug_selector)
+			2'd0: begin
+				debug_out_x_reg 		= in_x;
+				debug_out_y_reg 		= in_y;
+				debug_out_reg 			= in_right;
+				debug_out_is_val_reg	= in_is_val;
+			end
+			2'd1: begin
+				debug_out_x_reg 		= conv1_x;
+				debug_out_y_reg 		= conv1_y;
+				debug_out_reg 			= conv1_val;
+				debug_out_is_val_reg	= is_conv1_val;
+			end
+			2'd2: begin
+				debug_out_x_reg 		= cen1_x;
+				debug_out_y_reg 		= cen1_y;
+				debug_out_reg 			= cen1_val;
+				debug_out_is_val_reg	= is_cen1_val;
+			end
+			2'd3: begin
+				debug_out_x_reg 		= corr_out_x;
+				debug_out_y_reg 		= corr_out_y;
+				debug_out_reg 			= {disp_out_val, 2'b0};
+				debug_out_is_val_reg	= is_disp_out_val;
+			end
+			default: begin
+				debug_out_x_reg 		= corr_out_x;
+				debug_out_y_reg 		= corr_out_y;
+				debug_out_reg 			= {disp_out_val, 2'b0};
+				debug_out_is_val_reg	= is_disp_out_val;
+			end
+		endcase
+	end
 endmodule
