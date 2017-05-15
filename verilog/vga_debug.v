@@ -17,7 +17,7 @@ module vga_stereo_debug #(parameter ROW_SZ = 320, parameter COL_SZ = 240)(
 	wire		[18:0]	wr_addr;
 	wire 		[18:0]	rd_addr;
 
-	assign wr_addr = in_y*ROW_SZ + in_x;
+	assign wr_addr = in_y*640 + in_x;
 	assign rd_addr = pixel_y*640 + pixel_x;
 
 	dual_clock_ram_640_480 frame_buf(
