@@ -44,7 +44,7 @@ imagesc(img_mat);
 colorbar();
 
 % Post processing
-img_filt = medfilt2(img_mat, [7 7]);
+img_filt = medfilt2(img_mat, [3 3]);
 figure;
 imagesc(img_filt);
 %colormap('gray');

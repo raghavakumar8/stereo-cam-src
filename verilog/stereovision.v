@@ -13,8 +13,8 @@ module stereo(
 	output		[7:0]	out_stereo,
 	output				out_is_val
 );
-	localparam row_sz = 320;
-	localparam col_sz = 480;
+	localparam row_sz = 447;
+	localparam col_sz = 370;
 
 	// Instantiate convolve modules
 	wire	[7:0]	conv0_val;
