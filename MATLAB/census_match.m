@@ -11,16 +11,10 @@ function disparity_map = census_match(left, right, maxdisp)
 % disparity_map: disparity map- image of the same size as input image
 % but the left (or right) edge is incorrect
 
-%filtering with laplacian of gaussian
-% lapOfGauss = [0 -1 0 ; -1 4 -1 ; 0 -1 0];
-% l1 = conv2(left, lapOfGauss,'same');
-% r1 = conv2(right, lapOfGauss,'same');
-% %figure;imagesc(l1);colormap(gray);axis image;
-% left = l1;
-% right = r1;
+gaussianFilt = [0.0625 0.125 0.0625; 0.125 0.25 0.125; 0.0625 0.125 0.0625;];
 
-left = conv2(left, ones(3,3), 'same');
-right = conv2(right, ones(3,3), 'same');
+left = conv2(single(left), gaussianFilt, 'same');
+right = conv2(single(right), gaussianFilt, 'same');
 
 [m n]=size(left);
 
@@ -64,15 +58,13 @@ for y=1:m-windowSize+1
     end
 end
 
-leftCenVis = 128*leftCen(:,:,1) + 64*leftCen(:,:,2) + 32*leftCen(:,:,3) ...
-    + 16*leftCen(:,:,4) + 8*leftCen(:,:,6) + 4*leftCen(:,:,7) ... 
-    + 2*leftCen(:,:,8) + leftCen(:,:,9);
-figure;imagesc(leftCenVis);colormap(gray);axis image;
-
-rightCenVis = 128*rightCen(:,:,1) + 64*rightCen(:,:,2) + 32*rightCen(:,:,3) ...
-    + 16*rightCen(:,:,4) + 8*rightCen(:,:,6) + 4*rightCen(:,:,7) ... 
-    + 2*rightCen(:,:,8) + rightCen(:,:,9);
-figure;imagesc(rightCenVis);colormap(gray);axis image;
+% leftCenVis = 128*leftCen(:,:,1) + 64*leftCen(:,:,2) + 32*leftCen(:,:,3) ...
+%     + 16*leftCen(:,:,4) + 8*leftCen(:,:,6) + 4*leftCen(:,:,7) ... 
+%     + 2*leftCen(:,:,8) + leftCen(:,:,9);
+% 
+% rightCenVis = 128*rightCen(:,:,1) + 64*rightCen(:,:,2) + 32*rightCen(:,:,3) ...
+%     + 16*rightCen(:,:,4) + 8*rightCen(:,:,6) + 4*rightCen(:,:,7) ... 
+%     + 2*rightCen(:,:,8) + rightCen(:,:,9);
 
 %do the census windowing
 [cen_m, cen_n, cen_l] = size(leftCen);
@@ -105,7 +97,7 @@ set(h,'Name','Disparity progress');
 [cenwnd_m, cenwnd_n, cenwnd_l] = size(leftCenWnd);
 
 % CHANGE THIS TO SET THE CENSUS OFFSET AMOUNT
-CENSUS_OFFSET = 64;
+CENSUS_OFFSET = 0;
 
 for d=0:(maxdisp)
     diss(:) = Inf;
@@ -142,4 +134,6 @@ if (nargout ==0) %show output only if the user didn't specify an output
                  %image
   %figure;imagesc(dmapUnique);colormap(gray);axis image;
   figure;imagesc(disparity_map);colormap(gray);axis image;
+  A = medfilt2(disparity_map);
+  figure;imagesc(A);colormap(gray);axis image;
 end
